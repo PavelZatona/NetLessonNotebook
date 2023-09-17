@@ -27,6 +27,18 @@ public class MainViewModel : ViewModelBase
 
     #endregion
 
+    #region New note title
+
+    private string _newNoteTitle;
+
+    public string NewNoteTitle
+    {
+        get => _newNoteTitle;
+        set => this.RaiseAndSetIfChanged(ref _newNoteTitle, value);
+    }
+
+    #endregion
+
     #endregion
 
     #region Commands
@@ -35,6 +47,11 @@ public class MainViewModel : ViewModelBase
     /// Команда для добавления заметки
     /// </summary>
     public ReactiveCommand<Unit, Unit> AddNoteCommand { get; }
+
+    /// <summary>
+    /// Команда удаления заметки
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> DeleteNoteCommand { get; }
 
     #endregion
 
@@ -55,6 +72,7 @@ public class MainViewModel : ViewModelBase
         #region Commands to methods binding
 
         AddNoteCommand = ReactiveCommand.Create(AddNote);
+        DeleteNoteCommand = ReactiveCommand.Create(DeleteNote);
 
         #endregion
 
@@ -80,12 +98,18 @@ public class MainViewModel : ViewModelBase
         {
             Id = Guid.NewGuid(),
             LastUpdateDate = DateTime.UtcNow,
-            Title = "Тестовая заметка",
+            Title = NewNoteTitle,
             Content = ""
         });
 
         // Очищаем список заметок на экране и перезапрашиваем его из хранилища (т.к. в нём появилась новая заметка)
         Notes.Clear();
         Notes.AddRange(_notesStorageService.GetAllNotes());
+    }
+
+    // Метод удаления выделенной заметки
+    private void DeleteNote()
+    {
+        int a = 10;
     }
 }

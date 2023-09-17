@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Notebook.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Notebook.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+	
+    <UserControl.Styles>
+        <StyleInclude Source="/Styles/Common.axaml" />
+    </UserControl.Styles>
+	
+	<!-- Main grid -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" MinWidth="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+		
+	    <!-- Notes list -->
+        <Border
+            Grid.Column="0"
+            Grid.Row="0"
+            Classes="VisibleBorders">
+            
+			<!-- Table with notes list and buttons -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+        
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+				    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+			
+				<!--Notes list -->
+			    <Border
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Classes="VisibleBorders">
+					
+				    <ListBox
+						ItemsSource="{ Binding Notes }">
+						<ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Label Content="{ Binding Title }" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+					</ListBox>
+				
+				</Border>
+				
+			    <!--Notes buttons -->
+			    <Border
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Classes="VisibleBorders">
+					
+				    <Button
+						Command="{ Binding AddNoteCommand }">
+						Добавить
+					</Button>
+				
+				</Border>
+					
+			</Grid>
+            
+        </Border>
+	
+	    <!-- Current note -->
+        <Border
+            Grid.Column="1"
+            Grid.Row="0"
+            Classes="VisibleBorders">
+            
+            <Label>Здесь будет текущая заметка</Label>
+            
+        </Border>
+	
+	</Grid>
+
+</UserControl>

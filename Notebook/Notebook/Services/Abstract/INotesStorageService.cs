@@ -23,5 +23,10 @@ namespace Notebook.Services.Abstract
         /// Метод получает заметку по ID, если такой заметки нет - кидает исключение
         /// </summary>
         Note GetNoteById(Guid id);
+
+        /// <summary>
+        /// Удалить заметку с таким-то ID, если такой заметки нет - ничего не делает
+        /// </summary>
+        void DeleteNoteById(Guid id);
     }
 }

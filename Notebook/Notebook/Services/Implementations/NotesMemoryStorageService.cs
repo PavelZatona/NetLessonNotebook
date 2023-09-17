@@ -33,6 +33,13 @@ namespace Notebook.Services.Implementations
             _notesInMemory.Add(note);
         }
 
+        public void DeleteNoteById(Guid id)
+        {
+            _notesInMemory = _notesInMemory
+                .Where(n => n.Id != id)
+                .ToList();
+        }
+
         public IReadOnlyCollection<Note> GetAllNotes()
         {
             return _notesInMemory;

@@ -18,6 +18,11 @@ namespace Notebook.Services.Implementations
             throw new NotImplementedException("Добавление заметки в файл не реализовано!");
         }
 
+        public void DeleteNoteById(Guid id)
+        {
+            throw new NotImplementedException("Удаление заметок из файла не реализовано!");
+        }
+
         public IReadOnlyCollection<Note> GetAllNotes()
         {
             throw new NotImplementedException("Получение заметок из файла не реализовано!");

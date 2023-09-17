@@ -51,7 +51,8 @@
                     Classes="VisibleBorders">
 					
 				    <ListBox
-						ItemsSource="{ Binding Notes }">
+						ItemsSource="{ Binding Notes }"
+						SelectedIndex="{ Binding SelectedNoteIndex }">
 						
 						<!-- Notes list item template -->
 						<ListBox.ItemTemplate>

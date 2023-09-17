@@ -39,6 +39,18 @@ public class MainViewModel : ViewModelBase
 
     #endregion
 
+    #region Selected note index
+
+    private int _selectedNoteIndex;
+
+    public int SelectedNoteIndex
+    {
+        get => _selectedNoteIndex;
+        set => this.RaiseAndSetIfChanged(ref _selectedNoteIndex, value);
+    }
+
+    #endregion
+
     #endregion
 
     #region Commands
@@ -110,6 +122,22 @@ public class MainViewModel : ViewModelBase
     // Метод удаления выделенной заметки
     private void DeleteNote()
     {
-        int a = 10;
+        if (SelectedNoteIndex == -1)
+        {
+            return;
+        }
+
+        if (Notes.Count == 0)
+        {
+            return;
+        }
+
+        // Получаем GUID заметки, которую надо удалить
+        var idToDelete = Notes[SelectedNoteIndex].Id;
+
+        _notesStorageService.DeleteNoteById(idToDelete);
+
+        Notes.Clear();
+        Notes.AddRange(_notesStorageService.GetAllNotes());
     }
 }

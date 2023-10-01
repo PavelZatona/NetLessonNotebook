@@ -103,7 +103,24 @@ namespace Notebook.Services.Implementations
         {
             var jsonString = JsonSerializer.Serialize(notesList);
 
-            File.WriteAllText(NotesFileName, jsonString);
+            //File.WriteAllText(NotesFileName, jsonString);
+
+            using (var memStream = new MemoryStream())
+            {
+                var streamWriter = new StreamWriter(memStream, new UnicodeEncoding());
+
+                // Собственно пишем строку (в memory stream)
+                streamWriter.Write(jsonString);
+                streamWriter.Flush();
+                memStream.Seek(0, SeekOrigin.Begin);
+
+                // Пишем получившуюся memory stream в файл
+                using (var fileStream = File.Open(NotesFileName, FileMode.Create))
+                {
+                    memStream.CopyTo(fileStream);
+                    fileStream.Flush();
+                }
+            }
         }
     }
 }

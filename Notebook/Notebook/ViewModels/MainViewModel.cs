@@ -51,7 +51,10 @@ public class MainViewModel : ViewModelBase
             // value - это новое значение переменной, которое будет устанавливаться
             this.RaiseAndSetIfChanged(ref _selectedNoteIndex, value);
 
-            ShowNote(Notes[value].Id);
+            if (value >= 0)
+            {
+                ShowNote(Notes[value].Id);
+            }
         }
     }
 

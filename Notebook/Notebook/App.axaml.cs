@@ -65,7 +65,7 @@ public partial class App : Application
 
         // Везде, где программа будет пытаться иметь дело с INotesStorageService она на самом деле
         // будет получать NotesMemoryStorageService
-        services.AddSingleton<INotesStorageService, NotesMemoryStorageService>();
+        services.AddSingleton<INotesStorageService, NotesFileStorageService>();
 
         #endregion
 

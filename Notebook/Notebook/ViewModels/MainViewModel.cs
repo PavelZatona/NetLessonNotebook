@@ -46,7 +46,25 @@ public class MainViewModel : ViewModelBase
     public int SelectedNoteIndex
     {
         get => _selectedNoteIndex;
-        set => this.RaiseAndSetIfChanged(ref _selectedNoteIndex, value);
+        set
+        {
+            // value - это новое значение переменной, которое будет устанавливаться
+            this.RaiseAndSetIfChanged(ref _selectedNoteIndex, value);
+
+            ShowNote(Notes[value].Id);
+        }
+    }
+
+    #endregion
+
+    #region Note content
+
+    private string _noteContent;
+
+    public string NoteContent
+    {
+        get => _noteContent;
+        set => this.RaiseAndSetIfChanged(ref _noteContent, value);
     }
 
     #endregion
@@ -64,6 +82,11 @@ public class MainViewModel : ViewModelBase
     /// Команда удаления заметки
     /// </summary>
     public ReactiveCommand<Unit, Unit> DeleteNoteCommand { get; }
+
+    /// <summary>
+    /// Команда сохранения заметки
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> SaveNoteCommand { get; }
 
     #endregion
 
@@ -85,19 +108,14 @@ public class MainViewModel : ViewModelBase
 
         AddNoteCommand = ReactiveCommand.Create(AddNote);
         DeleteNoteCommand = ReactiveCommand.Create(DeleteNote);
+        SaveNoteCommand = ReactiveCommand.Create(SaveNote);
 
         #endregion
 
+        NoteContent = "Выберите заметку слева...";
+
         // Загрузка существующих заметок из хранилища при запуске программы
         Notes.AddRange(_notesStorageService.GetAllNotes());
-
-        /*_notesStorageService.AddNote(new Note()
-        {
-            Id = Guid.NewGuid(),
-            LastUpdateDate = DateTime.UtcNow,
-            Title = "Тестовая заметка",
-            Content = "Тестовое содержимое"
-        });*/
     }
 
     /// <summary>
@@ -111,7 +129,7 @@ public class MainViewModel : ViewModelBase
             Id = Guid.NewGuid(),
             LastUpdateDate = DateTime.UtcNow,
             Title = NewNoteTitle,
-            Content = ""
+            Content = string.Empty
         });
 
         // Очищаем список заметок на экране и перезапрашиваем его из хранилища (т.к. в нём появилась новая заметка)
@@ -139,5 +157,34 @@ public class MainViewModel : ViewModelBase
 
         Notes.Clear();
         Notes.AddRange(_notesStorageService.GetAllNotes());
+    }
+
+    /// <summary>
+    /// Этот метод показывает заметку в правой части программы
+    /// </summary>
+    private void ShowNote(Guid noteId)
+    {
+        var note = _notesStorageService.GetNoteById(noteId);
+
+        NoteContent = note.Content;
+    }
+
+    private void SaveNote()
+    {
+        if (SelectedNoteIndex == -1)
+        {
+            return;
+        }
+
+        if (Notes.Count == 0)
+        {
+            return;
+        }
+
+        // Получаем GUID заметки, которую надо сохранить
+        var idToSave = Notes[SelectedNoteIndex].Id;
+
+        // Сохраняем
+        _notesStorageService.UpdateNoteContent(idToSave, NoteContent);
     }
 }

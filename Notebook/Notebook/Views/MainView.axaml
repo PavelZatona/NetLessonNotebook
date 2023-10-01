@@ -125,9 +125,35 @@
             Grid.Column="1"
             Grid.Row="0"
             Classes="VisibleBorders">
-            
-            <Label>Здесь будет текущая заметка</Label>
-            
+			
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<TextBox
+					Grid.Column="0"
+					Grid.Row="0"
+					AcceptsReturn="True"
+					Text="{ Binding NoteContent }">
+					
+				</TextBox>
+
+				<Button
+					Grid.Column="0"
+					Grid.Row="1"
+					HorizontalAlignment="Right"
+					Command="{ Binding SaveNoteCommand }">
+					Сохранить
+				</Button>
+				
+			</Grid>
+			
         </Border>
 	
 	</Grid>

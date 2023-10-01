@@ -32,5 +32,10 @@ namespace Notebook.Services.Implementations
         {
             throw new NotImplementedException("Получение заметки из файла по ID не реализовано!");
         }
+
+        public void UpdateNoteContent(Guid id, string content)
+        {
+            throw new NotImplementedException("Обновление заметки не реализовано!");
+        }
     }
 }

@@ -28,5 +28,10 @@ namespace Notebook.Services.Abstract
         /// Удалить заметку с таким-то ID, если такой заметки нет - ничего не делает
         /// </summary>
         void DeleteNoteById(Guid id);
+
+        /// <summary>
+        /// Обновить содержимое заметки
+        /// </summary>
+        void UpdateNoteContent(Guid id, string content);
     }
 }

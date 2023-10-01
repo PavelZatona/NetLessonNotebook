@@ -51,5 +51,13 @@ namespace Notebook.Services.Implementations
                 .Single(n => n.Id == id); // Вернуть единственный элемент, удовлетворяющий условию. Если никто не удовлетворяет
             // или удовлетворяет несколько - выпадает
         }
+
+        public void UpdateNoteContent(Guid id, string content)
+        {
+            var note = GetNoteById(id);
+
+            note.Content = content;
+            note.LastUpdateDate = DateTime.UtcNow;
+        }
     }
 }

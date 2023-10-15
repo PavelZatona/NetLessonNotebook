@@ -2,8 +2,11 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
+using Notebook.Mappers.Abstract;
+using Notebook.Mappers.Implementations;
 using Notebook.Services.Abstract;
 using Notebook.Services.Implementations;
+using Notebook.Services.Implementations.DAO;
 using Notebook.ViewModels;
 using Notebook.Views;
 using System;
@@ -65,7 +68,9 @@ public partial class App : Application
 
         // Везде, где программа будет пытаться иметь дело с INotesStorageService она на самом деле
         // будет получать NotesMemoryStorageService
-        services.AddSingleton<INotesStorageService, NotesFileStorageService>();
+        services.AddSingleton<INotesStorageService, NotesDbStorageService>();
+
+        services.AddSingleton<INotesMapper, NotesMapper>();
 
         #endregion
 

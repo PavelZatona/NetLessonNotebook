@@ -10,7 +10,7 @@ namespace Notebook.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    #region Bound properties
+     #region Bound properties
 
     #region Notes
 

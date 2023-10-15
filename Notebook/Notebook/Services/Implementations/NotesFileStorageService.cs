@@ -4,6 +4,7 @@ using Notebook.Services.Abstract;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -19,7 +20,7 @@ namespace Notebook.Services.Implementations
         /// <summary>
         /// В этот файл (путь относителен от exe) мы будем сохранять заметки
         /// </summary>
-        private const string NotesFileName = "Notes.json";
+        private const string NotesFileName = "Notes.json.gz";
 
         public void AddNote(Note note)
         {
@@ -84,7 +85,7 @@ namespace Notebook.Services.Implementations
             SerializeNotes(currentNotes);
         }
 
-        private NotesList DeserializeNotes()
+/*        private NotesList DeserializeNotes()
         {
             if (!File.Exists(NotesFileName))
             {
@@ -97,9 +98,33 @@ namespace Notebook.Services.Implementations
             var jsonString = File.ReadAllText(NotesFileName);
 
             return JsonSerializer.Deserialize<NotesList>(jsonString);
+        }*/
+
+        private NotesList DeserializeNotes()
+        {
+            if (!File.Exists(NotesFileName))
+            {
+                return new NotesList()
+                {
+                    Notes = new List<Note>()
+                };
+            }
+
+            string jsonString;
+
+            using (var fileStream = File.Open(NotesFileName, FileMode.Open))
+            {
+                using (var decompressor = new GZipStream(fileStream, CompressionMode.Decompress))
+                {
+                    var streamReader = new StreamReader(decompressor, new UnicodeEncoding());
+                    jsonString = streamReader.ReadToEnd();
+                }
+            }
+
+            return JsonSerializer.Deserialize<NotesList>(jsonString);
         }
 
-        private void SerializeNotes(NotesList notesList)
+        /*private void SerializeNotes(NotesList notesList)
         {
             var jsonString = JsonSerializer.Serialize(notesList);
 
@@ -119,6 +144,22 @@ namespace Notebook.Services.Implementations
                 {
                     memStream.CopyTo(fileStream);
                     fileStream.Flush();
+                }
+            }
+        }*/
+
+        private void SerializeNotes(NotesList notesList)
+        {
+            var jsonString = JsonSerializer.Serialize(notesList);
+
+            using (var fileStream = File.Open(NotesFileName, FileMode.Create))
+            {
+                using (var compressor = new GZipStream(fileStream, CompressionLevel.SmallestSize))
+                {
+                    var streamWriter = new StreamWriter(compressor, new UnicodeEncoding());
+
+                    streamWriter.Write(jsonString); // Здесь мы пишем строку в стрим
+                    streamWriter.Flush(); // Сброс буфера
                 }
             }
         }
